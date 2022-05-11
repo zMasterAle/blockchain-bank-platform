@@ -102,16 +102,16 @@ class Blockchain:
     def getBalance(self, user):
         balance = 0
         for i in self.chain:
-            for j in i.transactions:
-                if j.recipient == user:
-                    balance += int(j.amount)
+            for j in i['transactions']:
+                if j['recipient'] == user:
+                    balance += int(j['amount'])
                 elif j.sender == user:
-                    balance -= int(j.amount)
+                    balance -= int(j['amount'])
         for i in self.current_transactions:
-            if i.recipient == user:
-                balance += int(i.amount)
-            elif i.sender == user:
-                balance -= int(i.amount)
+            if i['recipient'] == user:
+                balance += int(i['amount'])
+            elif i['sender'] == user:
+                balance -= int(i['amount'])
         return balance
 
     def new_block(self, proof, previous_hash):
