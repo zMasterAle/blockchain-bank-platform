@@ -8,6 +8,8 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@vue/cli-plugin-eslint": "^5.0.4",
+    "node-rsa": "^1.1.1",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14"
   },
