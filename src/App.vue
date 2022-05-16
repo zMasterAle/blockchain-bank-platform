@@ -8,15 +8,15 @@ import TopBarUser from "./components/TopBarUser.vue";
 
 (function () {
     const script = document.createElement("script");
-    script.src = "./src/scripts/variables.js";
+    // import jquery from google
+    script.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js";
     script.async = false;
     document.head.appendChild(script);
 })();
 
 (function () {
     const script = document.createElement("script");
-    // import jquery from google
-    script.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js";
+    script.src = "./src/scripts/variables.js";
     script.async = false;
     document.head.appendChild(script);
 })();
@@ -41,4 +41,5 @@ body {
     overflow: hidden;
     background: linear-gradient(120deg, #2980b9, #8e44ad);
 }
+
 </style>

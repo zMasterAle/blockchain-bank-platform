@@ -1,6 +1,12 @@
 <template>
     <div class="center">
+        <div class="loading hidden">
+            <div class='uil-ring-css' style='transform:scale(0.79);'>
+                <div></div>
+            </div>
+        </div>
         <form @submit="onSubmit" id="jquery-login">
+            <div class="signup_link"></div>
             <h1>Login</h1>
             <h4>Inserisci le credenziali per accedere</h4>
             <div class="txt_field">
@@ -19,28 +25,30 @@
                 <router-link to="/signup" tag="a">Signup</router-link>
             </div>
         </form>
-        <form @submit="onSubmit" id="jquery-logout">
-            <h1>Log Out</h1>
+        <form @submit="onSubmit" id="jquery-logout" hidden="true">
+            <div class="signup_link"></div>
+            <h1>Loggato</h1>
             <h4>Premi per effettuare il log Out</h4>
+            <div class="signup_link"></div>
             <input type="submit" value="Log Out">
+            <div class="signup_link"></div>
         </form>
     </div>
 </template>
 
 <script>
-$(document).ready(function() {
-    if (publicKey == "")
-    {
-        $("#jquery-login").show();
-        $("#jquery-logout").hide();
-    }
-    else
-    {
-        $("#jquery-login").hide();
-        $("#jquery-logout").show();
-    }
-});
     export default {
+        mounted() {
+            if (loggedIn) {
+                $("#jquery-login").hide();
+                $("#jquery-logout").show();
+            }
+            else
+            {
+                $("#jquery-login").show();
+                $("#jquery-logout").hide();
+            }
+        },
         data (){
             return {
                 public_key : '',
@@ -50,12 +58,33 @@ $(document).ready(function() {
         methods : {
             onSubmit(e){
                 e.preventDefault()
-                publicKey = document.getElementById("public_key").value;
-                privateKey = document.getElementById("private_key").value;
-
-                checkAmount((balance) => {
-                    obj.balance = balance;
-                });
+                
+                if(!loggedIn)
+                {
+                    checkAmount((balance) => {
+                        balance = 0;
+                        if (balance >= 0)
+                        {
+                            alert("Loggato con successo!");
+                            loggedIn = true;
+                            publicKey = document.getElementById("public_key").value;
+                            privateKey = document.getElementById("private_key").value;
+                            $("#jquery-login").hide();
+                            $("#jquery-logout").show();
+                            document.getElementById("public_key").value = "";
+                            document.getElementById("private_key").value = "";
+                        }
+                        loadingOverlay.classList.add('hidden');
+                    });
+                }
+                else
+                {
+                    loggedIn = false;
+                    publicKey = "";
+                    privateKey = "";
+                    $("#jquery-login").show();
+                    $("#jquery-logout").hide();
+                }
             }
         }
     }
@@ -191,6 +220,177 @@ input[type="submit"]:hover {
 .signup_link a:hover {
     text-decoration: underline;
 }
+
+/* ---------------------------- */
+*.hidden {
+  display: none !important;
+}
+
+div.loading{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(16, 16, 16, 0.5);
+  z-index: 100;
+  border-radius: 10px;
+}
+
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.uil-ring-css {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+}
+.uil-ring-css > div {
+  position: absolute;
+  display: block;
+  width: 160px;
+  height: 160px;
+  top: 20px;
+  left: 20px;
+  border-radius: 80px;
+  box-shadow: 0 6px 0 0 #ffffff;
+  -ms-animation: uil-ring-anim 1s linear infinite;
+  -moz-animation: uil-ring-anim 1s linear infinite;
+  -webkit-animation: uil-ring-anim 1s linear infinite;
+  -o-animation: uil-ring-anim 1s linear infinite;
+  animation: uil-ring-anim 1s linear infinite;
+}
+/* ---------------------------- */
 
 @media (min-width: 1024px) {
     .test {

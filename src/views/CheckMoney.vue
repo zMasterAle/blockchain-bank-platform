@@ -1,6 +1,7 @@
 <template>
     <div class="center">
         <form @submit="onSubmit">
+            <div class="signup_link"></div>
             <h1>Controlla saldo</h1> <br> <br>
             <h4>Controlla il tuo saldo attuale di GiorgiCoin</h4> <br>
             <div class="txt_field">
@@ -32,7 +33,6 @@ export default {
             else
             {
                 checkAmount((balance) => {
-                    obj.balance = balance;
                     document.getElementById("saldo").value = balance;
                 });
             }
@@ -66,7 +66,7 @@ body {
     background: white;
     border-radius: 10px;
     box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.05);
-    height: 300px;
+    height: 335px;
 }
 
 .center h1 {

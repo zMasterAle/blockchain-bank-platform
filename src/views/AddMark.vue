@@ -1,6 +1,7 @@
 <template>
     <div class="center">
         <form @submit="onSubmit">
+            <div class="signup_link"></div>
             <h1>Aggiungi voto</h1> <br> <br>
             <h4>Inserisci il voto per ricevere una somma di GiorgiCoin</h4> <br>
             <div class="txt_field">
@@ -31,7 +32,6 @@ export default {
                 obj.sender = bankPublicKey;
                 obj.recipient = publicKey;
                 obj.amount = ((document.getElementById("mark").value)*10);
-                obj.balance += obj.amount;
                 console.log(obj);
                 const Http = new XMLHttpRequest();
                 const url='http://localhost:5000/transactions/new';
@@ -73,7 +73,7 @@ body {
     background: white;
     border-radius: 10px;
     box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.05);
-    height: 280px;
+    height: 315px;
 }
 
 .center h1 {
