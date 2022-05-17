@@ -43,13 +43,13 @@ export default {
             loadingScreen();
             let keyPair = window.crypto.subtle.generateKey(
                 {
-                    name: "RSA-OAEP",
+                    name: "RSASSA-PKCS1-v1_5",
                     modulusLength: 4096,
                     publicExponent: new Uint8Array([1, 0, 1]),
                     hash: "SHA-256"
                 },
                 true,
-                ["encrypt", "decrypt"]
+                ["sign", "verify"]
             ).then((keyPair2) => {
                     window.crypto.subtle.exportKey("spki", keyPair2.publicKey).then(function (publicKeyJwk) {
                     const exported = publicKeyJwk;
