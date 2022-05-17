@@ -1,7 +1,8 @@
-let obj = {
+let block = {
     sender: "",
     recipient: "",
     amount: "",
+    digitalSignature: "",
 }
 
 let privateKey = "";
@@ -13,7 +14,6 @@ let loadingOverlay
 function checkAmount(cb) 
 {
     let balance;
-    loadingScreen();
     const Http = new XMLHttpRequest();
     Http.responseType = 'json';
     const url='http://localhost:5000/chain';
@@ -21,15 +21,18 @@ function checkAmount(cb)
     Http.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
     Http.setRequestHeader('Access-Control-Allow-Origin', '*');
     Http.send(null);
-    // console.log(publicKey);
     Http.onerror = function()
     {
         alert("Il server non risponde");
+        loadingScreen();
         cb(-1);
+        return;
     }
     Http.onload = function() {
         if (Http.status != 200) {
-            alert("C'è stato un errore con la connessione alla blockchain");    
+            alert("C'è stato un errore con la connessione alla blockchain"); 
+            loadingOverlay.classList.add('hidden');
+            return;
         }
         var jsonResponse = Http.response;
         let i = 0;
@@ -47,6 +50,7 @@ function checkAmount(cb)
         if (i == 0) 
         {
             alert("Utente non trovato");
+            loadingScreen();
             cb(-1);
         }
         cb(balance);
@@ -71,25 +75,25 @@ function loadingScreen()
 
 function sendTransaction()
 {
-    loadingScreen();
     const Http = new XMLHttpRequest();
     const url='http://localhost:5000/transactions/new';
     Http.open("POST", url);
     Http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     Http.setRequestHeader('Content-Type', 'application/json');
     Http.setRequestHeader('Access-Control-Allow-Origin', '*');
-    Http.send(JSON.stringify(obj));
+    Http.send(JSON.stringify(block));
     Http.onerror = function()
     {
         alert("Il server non risponde");
-        loadingOverlay.classList.add('hidden');
+        loadingScreen();
+        return;
     }
     Http.onload = function() 
     {
         if(this.readyState == 4 && this.status == 200) 
         {
             alert(this.responseText);
-            loadingOverlay.classList.add('hidden');
+            loadingScreen();
         }
     }
 }

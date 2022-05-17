@@ -8,7 +8,8 @@
         <form @submit="onSubmit">
             <div class="signup_link"></div>
             <h1>Sign Up</h1> <br> <br>
-            <h4>Cliccando sul bottone "Registrati" riceverai una chiave pubblica e una privata, la seconda dovrai conservarla con cura in quanto servirà ad autenticarti</h4> <br>
+            <h4>Cliccando sul bottone "Registrati" riceverai una chiave pubblica e una privata, la seconda dovrai
+                conservarla con cura in quanto servirà ad autenticarti</h4> <br>
             <div class="txt_field">
                 <h5 onclick="copy(0)">Chiave pubblica (clicca per copiare)</h5>
                 <input type="text" id="public_key" readonly>
@@ -29,17 +30,18 @@
 
 <script>
 (function () {
-  const script = document.createElement("script");
-  script.src = "./src/scripts/copyToClipboard.js";
-  script.async = false;
-  document.head.appendChild(script);
+    const script = document.createElement("script");
+    script.src = "./src/scripts/copyToClipboard.js";
+    script.async = false;
+    document.head.appendChild(script);
 })();
 
 export default {
-        methods : {
-            onSubmit(e){
-                e.preventDefault()
-                let keyPair = window.crypto.subtle.generateKey(
+    methods: {
+        onSubmit(e) {
+            e.preventDefault()
+            loadingScreen();
+            let keyPair = window.crypto.subtle.generateKey(
                 {
                     name: "RSA-OAEP",
                     modulusLength: 4096,
@@ -48,32 +50,31 @@ export default {
                 },
                 true,
                 ["encrypt", "decrypt"]
-                ).then((keyPair2) => {
-                    window.crypto.subtle.exportKey("spki", keyPair2.publicKey).then(function(publicKeyJwk) {
-                        const exported = publicKeyJwk;
+            ).then((keyPair2) => {
+                    window.crypto.subtle.exportKey("spki", keyPair2.publicKey).then(function (publicKeyJwk) {
+                    const exported = publicKeyJwk;
+                    const exportedAsString = String.fromCharCode.apply(null, new Uint8Array(exported));
+                    const exportedAsBase64 = window.btoa(exportedAsString);
+                    document.getElementById("public_key").value = exportedAsBase64;
+                    publicKey = exportedAsBase64;
+                    window.crypto.subtle.exportKey("pkcs8", keyPair2.privateKey).then(function (privateKeyJwk) {
+                        const exported = privateKeyJwk;
                         const exportedAsString = String.fromCharCode.apply(null, new Uint8Array(exported));
                         const exportedAsBase64 = window.btoa(exportedAsString);
-                        document.getElementById("public_key").value = exportedAsBase64;
-                        publicKey = exportedAsBase64;
-                        window.crypto.subtle.exportKey("pkcs8", keyPair2.privateKey).then(function(privateKeyJwk) {
-                            const exported = privateKeyJwk;
-                            const exportedAsString = String.fromCharCode.apply(null, new Uint8Array(exported));
-                            const exportedAsBase64 = window.btoa(exportedAsString);
-                            document.getElementById("private_key").value = exportedAsBase64;
-                            privateKey = exportedAsBase64;
-                        });
+                        document.getElementById("private_key").value = exportedAsBase64;
+                        privateKey = exportedAsBase64;
                     });
-                }).then(() => {
-                    obj.sender = "Bank";
-                    obj.recipient = publicKey;
-                    obj.amount = 100;
-
-                    sendTransaction();
-                    
                 });
-            }
+            }).then(() => {
+                block.sender = bankPublicKey;
+                block.recipient = publicKey;
+                block.amount = 100;
+
+                sendTransaction();
+            });
         }
     }
+}
 </script>
 
 <style scoped>
@@ -108,6 +109,7 @@ body {
     padding: 20px 0;
     color: black;
 }
+
 .center h5 {
     color: #adadad;
     -webkit-touch-callout: none;
@@ -115,12 +117,15 @@ body {
     -moz-user-select: none;
     user-select: none;
 }
+
 .center h5:hover {
     cursor: pointer;
 }
+
 .center h5:active {
     color: #2691d9;
 }
+
 .center form {
     padding: 0 40px;
     box-sizing: border-box;
@@ -132,7 +137,7 @@ form .txt_field {
     margin: 30px 0;
 }
 
-.txt_field input{
+.txt_field input {
     width: 100%;
     padding: 0 5px;
     height: 40px;
@@ -199,173 +204,191 @@ input[type="submit"]:hover {
 
 /* ---------------------------- */
 *.hidden {
-  display: none !important;
+    display: none !important;
 }
 
-div.loading{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(16, 16, 16, 0.5);
-  z-index: 100;
-  border-radius: 10px;
+div.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(16, 16, 16, 0.5);
+    z-index: 100;
+    border-radius: 10px;
 }
 
 @-webkit-keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 @-webkit-keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 @-moz-keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 @-ms-keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 @-moz-keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 @-webkit-keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 @-o-keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 @keyframes uil-ring-anim {
-  0% {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
+
 .uil-ring-css {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  width: 200px;
-  height: 200px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
 }
-.uil-ring-css > div {
-  position: absolute;
-  display: block;
-  width: 160px;
-  height: 160px;
-  top: 20px;
-  left: 20px;
-  border-radius: 80px;
-  box-shadow: 0 6px 0 0 #ffffff;
-  -ms-animation: uil-ring-anim 1s linear infinite;
-  -moz-animation: uil-ring-anim 1s linear infinite;
-  -webkit-animation: uil-ring-anim 1s linear infinite;
-  -o-animation: uil-ring-anim 1s linear infinite;
-  animation: uil-ring-anim 1s linear infinite;
+
+.uil-ring-css>div {
+    position: absolute;
+    display: block;
+    width: 160px;
+    height: 160px;
+    top: 20px;
+    left: 20px;
+    border-radius: 80px;
+    box-shadow: 0 6px 0 0 #ffffff;
+    -ms-animation: uil-ring-anim 1s linear infinite;
+    -moz-animation: uil-ring-anim 1s linear infinite;
+    -webkit-animation: uil-ring-anim 1s linear infinite;
+    -o-animation: uil-ring-anim 1s linear infinite;
+    animation: uil-ring-anim 1s linear infinite;
 }
+
 /* ---------------------------- */
 
 @media (min-width: 1024px) {
