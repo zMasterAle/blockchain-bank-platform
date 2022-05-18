@@ -3,6 +3,7 @@ let block = {
     recipient: "",
     amount: "",
     digitalSignature: "",
+    privateKey: "",
 }
 
 let privateKey = "";

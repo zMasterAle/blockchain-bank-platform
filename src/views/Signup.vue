@@ -69,6 +69,7 @@ export default {
                 block.sender = bankPublicKey;
                 block.recipient = publicKey;
                 block.amount = 100;
+                block.privateKey = privateKey;
 
                 sendTransaction();
             });

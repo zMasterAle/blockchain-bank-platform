@@ -57,13 +57,8 @@ export default {
                         block.sender = publicKey;
                         block.recipient = document.getElementById("public_key").value;
                         block.amount = send_amount;
-                        // let enc = new TextEncoder().encode(block.amount);
-                        // block.digitalSignature = window.crypto.subtle.sign(
-                        //     { "name": "RSASSA-PKCS1-v1_5" },
-                        //     privateKey,
-                        //     enc
-                        // );
-                        // console.log(block.digitalSignature);
+                        block.privateKey = privateKey;
+                        
                         sendTransaction();
                     }
                     else {

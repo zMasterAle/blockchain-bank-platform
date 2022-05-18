@@ -1,7 +1,7 @@
 <template> 
     <div class="topnavUser" id="myTopnavUser">
         <div class="logo">
-            <router-link to="/" tag="a">BlockBank</router-link>
+            <router-link to="/login" tag="a">BlockBank</router-link>
         </div>
         <div class="options">
             <router-link to="/addMark" tag="a">Aggiungi voto</router-link>
