@@ -141,7 +141,7 @@ class Blockchain:
         self.chain.append(block)
         return block
 
-    def new_transaction(self, sender, recipient, amount, balance):
+    def new_transaction(self, sender, recipient, amount, balance, privKeyb64):
         """
         Creates a new transaction to go into the next mined Block
 
@@ -150,30 +150,39 @@ class Blockchain:
         :param amount: Amount
         :return: The index of the Block that will hold this transaction
         """
-        pubkey = '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'
-        keyDER = b64decode(pubkey)
+        # pubkey = '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'
+        keyDER = b64decode(privKeyb64)
         keyPriv = RSA.importKey(keyDER)
-        sig = pkcs1_15.new(keyPriv)
-        data = SHA384.new()
-        data.update(b'Hello')
-        signature = sig.sign(data)
+        sigObj = pkcs1_15.new(keyPriv)
+        dataHash = SHA384.new()
 
-        pubkey2 = 'MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA3gxT8Rjgd4TL1AT4onJYfuqRvgBkNG2bI+V4Sq24r/PKHCMSpNofdmTawK16IH7yB4/JWElqRfypkoWXE+GUltfmIFoqxZSKnMlHXGK8mPnVZxZET7Kzp7sEJFNz6MKNEOiCQdHvFerP2Mx/xtv37yDwqpbHBr47HadLiCyoFevi6LywsWKp6ehWTvPQsBNYsPgMDPRUAYwU8EI/dxE7Zi2/jBTpG0ZWFpqFj4XEFADGwAVxs7eFvYDs4Tn3NpJafpoXq7hmlxqJzugLb/x0VzP9P01WXCoOvm5cIZWxfjrKGG/KTqBcsxFxrhD4qTcPR3DMCTV3Js6hI7IHSsxAWAHV6NnOLJ01TW5BE0XzjMXMZeHXE6MfJDaQ7L97TOeiwhJMaUCpc4ODg5gl38/IppXUvcUecDVDIxES0XfEit2HhVuMv6iXcEFrzd3RnucUuamn9m161ob1hTKtIYIBUGq3S8YZ1ZQx/OC8kYpFny3zDljwCPDt25EOXBlfJ5QdHJjeIbuY+f/C2cJWcSTPk7oBsHMNJXWpyrVl5a8+VCJDJF6mDgy5dJgNo8PKvDGzzKqQ85XQGeW79iQGinrgL4YUSnPt139vT65WdUQ2Rx9eO6sLXi+ec277BZYakTvS9VxTRuTmuUGG+v3s7YzuNYZ5kNm5KYvCVaDPJvykSsECAwEAAQ=='
-        keyDER = b64decode(pubkey)
-        keyPriv = RSA.importKey(keyDER)
-        sig = pkcs1_15.new(keyPriv)  
-        data = SHA384.new()
-        data.update(b'Hello')
-        sig.verify(data, signature)
+        dataList = []
+        dataList.append({
+            'sender': sender,
+            'recipient': recipient,
+            'amount': amount, 
+        })
+        dataJSON = json.dumps(dataList).encode()
+
+        dataHash.update(dataJSON)
+        signature = sigObj.sign(dataHash)
 
         self.current_transactions.append({
             'sender': sender,
             'recipient': recipient,
             'amount': amount,
             "balance": balance,
+            "signature": b64encode(signature).decode('UTF-8'),
         })
 
         return self.last_block['index'] + 1
+    
+    def generateBankKeyPair(self):
+        key = RSA.generate(2048)
+        public = key.publickey()
+        self.privateBank = key.exportKey('PEM')
+        self.publicBank = public.exportKey('PEM')
+        self.bankBalance = 1000000 ########
 
     @property
     def last_block(self):
@@ -201,7 +210,28 @@ class Blockchain:
         :param last_block: <dict> last Block
         :return: <int>
         """
+        for i in self.current_transactions:
+            pubKeyb64 = i['sender']
+            keyDER = b64decode(pubKeyb64)
+            keyPub = RSA.importKey(keyDER)
+            sigObj = pkcs1_15.new(keyPub)  
+            dataHash = SHA384.new()
 
+            dataList = []
+            dataList.append({
+                'sender': i['sender'],
+                'recipient': i['recipient'],
+                'amount': i['amount'], 
+            })
+            dataJSON = json.dumps(dataList).encode()
+
+            dataHash.update(dataJSON)
+            try:
+                sigObj.verify(dataHash, b64decode(i['signature'].encode('utf_8')))
+            except:
+                index = self.current_transactions.index(i)
+                self.current_transactions.pop(index)
+                
         last_proof = last_block['proof']
         last_hash = self.hash(last_block)
 
@@ -259,12 +289,15 @@ def mine():
     miner = request.args.get("user")
     # We must receive a reward for finding the proof.
     # The sender is "0" to signify that this node has mined a new coin.
-    blockchain.new_transaction(
-        sender="0",
-        recipient=miner,
-        amount=1,
-        balance=blockchain.getBalance(miner)+1,
-    )
+    if blockchain.bankBalance > 0:
+        blockchain.new_transaction(
+            sender=blockchain.publicBank.decode('utf_8'),
+            recipient=miner,
+            amount=1,
+            balance=blockchain.getBalance(miner)+1,
+            privKeyb64=b64encode(blockchain.privateBank)
+        )
+        blockchain.bankBalance-=1
 
     # Forge the new Block by adding it to the chain
     previous_hash = blockchain.hash(last_block)
@@ -285,12 +318,12 @@ def new_transaction():
     values = request.get_json()
 
     # Check that the required fields are in the POST'ed data
-    required = ['sender', 'recipient', 'amount']
+    required = ['sender', 'recipient', 'amount', 'privKey']
     if not all(k in values for k in required):
         return 'Missing values', 400
 
     # Create a new Transaction
-    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'], blockchain.getBalance(values['recipient'])+int(values['amount']))
+    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'], blockchain.getBalance(values['recipient'])+int(values['amount']), values['privKey'])
 
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
@@ -369,5 +402,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     port = args.port
     transactions_per_block = args.tran
+    blockchain.generateBankKeyPair()
 
     app.run(host='0.0.0.0', port=port)
