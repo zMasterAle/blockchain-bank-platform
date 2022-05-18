@@ -3,12 +3,12 @@ let block = {
     recipient: "",
     amount: "",
     digitalSignature: "",
-    privateKey: "",
+    privKey: "",
 }
 
 let privateKey = "";
 let publicKey = "";
-let bankPublicKey = "";
+let bankPublicKey = "0";
 let loggedIn = false;
 let loadingOverlay
 
@@ -91,9 +91,10 @@ function sendTransaction()
     }
     Http.onload = function() 
     {
-        if(this.readyState == 4 && this.status == 200) 
+        if(this.readyState == 4 && this.status == 201) 
         {
-            alert(this.responseText);
+            // alert(this.responseText);
+            alert("Transazione inviata con successo");
             loadingScreen();
         }
     }
