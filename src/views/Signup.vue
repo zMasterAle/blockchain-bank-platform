@@ -36,6 +36,29 @@
     document.head.appendChild(script);
 })();
 
+function mineUser()
+{
+    const Http = new XMLHttpRequest();
+    Http.responseType = 'json';
+    const url = "http://localhost:5000/mine?user=" + publicKey + "";
+    Http.open("GET", url, true);
+    Http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    Http.setRequestHeader('Access-Control-Allow-Origin', '*');
+    Http.send(null);
+    Http.onload = function () {
+        // check if we got a valid response
+        if (Http.status === 200) {
+            // alert("Hai minato con successo!");
+            loadingScreen();
+            // coinsEarned += 1;
+        }
+        else {
+            alert(Http.response.message);
+            loadingScreen();
+        }
+    }
+}
+
 export default {
     methods: {
         onSubmit(e) {
@@ -63,15 +86,18 @@ export default {
                         const exportedAsBase64 = window.btoa(exportedAsString);
                         document.getElementById("private_key").value = exportedAsBase64;
                         privateKey = exportedAsBase64;
+                    }).then(() => {
+                        block.sender = bankPublicKey;
+                        block.recipient = publicKey;
+                        block.amount = 100;
+                        block.privKey = privateKey;
+
+                        sendTransaction();
+                    }).then(() => {
+                            loadingScreen();//////////////
+                            mineUser();
                     });
                 });
-            }).then(() => {
-                block.sender = bankPublicKey;
-                block.recipient = publicKey;
-                block.amount = 100;
-                block.privateKey = privateKey;
-
-                sendTransaction();
             });
         }
     }

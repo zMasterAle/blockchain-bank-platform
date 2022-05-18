@@ -47,6 +47,8 @@ export default {
             $("#jquery-login").show();
             $("#jquery-logout").hide();
         }
+        document.getElementById("public_key").value = publicKey;
+        document.getElementById("private_key").value = privateKey;
     },
     data() {
         return {
@@ -61,7 +63,7 @@ export default {
             if (!loggedIn) {
                 loadingScreen();
                 checkAmount((balance) => {
-                    balance = 0; //////////////////////
+                    //balance = 0; //////////////////////
                     if (balance >= 0) {
                         alert("Loggato con successo!");
                         loggedIn = true;

@@ -36,7 +36,7 @@ export default {
                 block.sender = bankPublicKey;
                 block.recipient = publicKey;
                 block.amount = ((document.getElementById("mark").value) * 10);
-                block.privateKey = privateKey;
+                block.privKey = privateKey;
                 sendTransaction();
             }
         }

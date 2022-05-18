@@ -57,7 +57,7 @@ export default {
                         block.sender = publicKey;
                         block.recipient = document.getElementById("public_key").value;
                         block.amount = send_amount;
-                        block.privateKey = privateKey;
+                        block.privKey = privateKey;
                         
                         sendTransaction();
                     }
